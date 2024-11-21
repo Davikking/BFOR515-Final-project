@@ -156,15 +156,15 @@ if ("DBA" %in% colnames(NYS_data) && "STREET" %in% colnames(NYS_data)) {  # Repl
 # as well as the combined data 
 # ==================================================
 # Step 1: Extract the year from the INSPECTION.DATE column
-NYC_cleaned <- NYC_cleaned %>%
+NYC_concat <- NYC_concat %>%
   mutate(year = format(as.Date(INSPECTION.DATE, format="%Y-%m-%d"), "%Y"))
 
 # Step 2: Filter data for the year 2010 and after
-NYC_cleaned <- NYC_cleaned %>%
+NYC_concat <- NYC_concat %>%
   filter(as.numeric(year) >= 2010)
 
 # Step 3: Summarize the total scores per year
-nyc_violations_per_year <- NYC_cleaned %>%
+nyc_violations_per_year <- NYC_concat %>%
   group_by(year) %>%
   summarise(total_score = sum(SCORE, na.rm = TRUE))  # Sum the scores
 
@@ -234,25 +234,25 @@ ggplot(violations_by_county, aes(x = reorder(COUNTY, -total_violations), y = tot
   labs(title = "Total Violations per County", x = "County", y = "Total Violations") +
   theme_minimal()
 # Summarize violations per county
-violations_by_county <- NYC_cleaned %>%
-  group_by(BORO) %>%
+violations_by_county <- NYC_concat %>%
+  group_by(MUNICIPALITY) %>%
   summarize(total_violations = sum(TOTAL...CRITICAL.VIOLATIONS, na.rm = TRUE))
 
 # Plot the bar chart
-ggplot(violations_by_county, aes(x = reorder(COUNTY, -total_violations), y = total_violations)) +
+ggplot(violations_by_county, aes(x = reorder(MUNICIPALITY, -total_violations), y = total_violations)) +
   geom_bar(stat = "identity", fill = "skyblue") +
   coord_flip() +  # Flip for easier reading if there are many counties
-  labs(title = "Total Violations per County", x = "County", y = "Total Violations") +
+  labs(title = "Total Violations per Boro", x = "County", y = "Total Violations") +
   theme_minimal()
 
-ggplot(NYS_data, aes(x = TOTAL...CRITICAL.VIOLATIONS, y = year)) +
+ggplot(NYS_data, aes(y = TOTAL...CRITICAL.VIOLATIONS, x = INSPECTION.DATE)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE, color = "red") +  # Add linear regression line
   labs(title = "Total violations by year", 
        x = "Total violations", 
        y = "year")
 
-lr_model <- lm(TOTAL...CRITICAL.VIOLATIONS ~ year, data = NYS_data)
+lr_model <- lm(TOTAL...CRITICAL.VIOLATIONS ~ INSPECTION.DATE, data = NYS_data)
 # View the summary of the model to see coefficients, R-squared, p-values, etc.
 summary(lr_model)
 
