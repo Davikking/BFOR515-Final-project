@@ -1,5 +1,5 @@
 Group 4
-James Pinto, Christoph Schwartz, Karthink Puranikamath, Patrick Burke
+James Pinto, Christoph Schwartz, Karthik Puranikamath, Patrick Burke
 
 By analyzing the New York State Department of Health (NYSDOH) Restaurant Inspection data, which is available through the NYSDOH Open Data Portal, we have addressed the need to enhance public health and safety. In addressing the need to improve public health and safety we have identified key attributes such as the number of critical violations as well as final scores and grades on inspections. These attributes have allowed us to view the level of safety by county in New York State as well as predicting the anticipated scores and grades using different analytical tools. 
 
